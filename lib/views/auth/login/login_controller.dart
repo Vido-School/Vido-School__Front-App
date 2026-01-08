@@ -32,7 +32,11 @@ class LoginController extends ChangeNotifier {
       );
 
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      authProvider.login(authData['token'], authData['user']);
+      await authProvider.login(
+        authData['token'], 
+        authData['user'],
+        refreshToken: authData['refreshToken'],
+      );
 
       // Ajoutez un debug print pour vérifier l'utilisateur
       debugPrint('Logged in user: ${authData['user'].toString()}');

@@ -267,7 +267,13 @@ class RegisterStudentController {
     _refresh();
 
     try {
+      // Préparer les données selon le sérialiseur backend
+      // Le sérialiseur StudentRegistrationSerializer n'accepte que:
+      // - current_level (requis)
+      // - major (optionnel)
+      // - interests (optionnel, liste)
       final body = {
+        // Champs de base User (requis par UserRegistrationSerializer)
         "email": emailController.text.trim(),
         "password": passwordController.text.trim(),
         "password_confirm": passwordController.text.trim(),
@@ -275,34 +281,31 @@ class RegisterStudentController {
         "last_name": lastNameController.text.trim(),
         "phone_number": phoneController.text.trim(),
         "date_of_birth": _formatDateForAPI(dateOfBirth),
-        "identity_document": identityFilePath,
-        "communication_preferences": selectedCommunicationPrefs,
+        "type": "student",
+        
+        // Champs optionnels User
+        if (selectedCommunicationPrefs.isNotEmpty)
+          "communication_preferences": selectedCommunicationPrefs,
         "data_processing_consent": true,
         "image_rights_consent": true,
-        "type": "student",
-
-        // Champs étudiant
-        "institution_name": institutionController.text.trim(),
+        
+        // Champs spécifiques Student (acceptés par le sérialiseur)
         "current_level": currentLevelController.text.trim(),
-        "major": majorController.text.trim(),
-        "academic_year": academicYearController.text.trim(),
-        "student_id": studentIdController.text.trim(),
-        "scholarship": isScholarship,
-        "scholarship_type": scholarshipTypeController.text.trim(),
-        "housing_needs": housingNeeds,
-        "internship_search": internshipSearchController.text.trim(),
-        "computer_skills": computerSkills,
-        "extracurricular_activities": extracurricularActivitiesController.text
-            .trim(),
-        "interests": interests,
-        "average_grade": double.tryParse(averageGradeController.text.trim()),
+        if (majorController.text.trim().isNotEmpty)
+          "major": majorController.text.trim(),
+        if (interests.isNotEmpty)
+          "interests": interests,
       };
 
       final response = await AuthService.registerStudent(body: body);
 
-    // Connecter l'utilisateur automatiquement
+    // Connecter l'utilisateur automatiquement et sauvegarder les tokens
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    authProvider.login(response['token'], response['user']);
+    await authProvider.login(
+      response['token'], 
+      response['user'],
+      refreshToken: response['refreshToken'],
+    );
 
     // Rediriger vers la page de succès
     Navigator.pushNamedAndRemoveUntil(

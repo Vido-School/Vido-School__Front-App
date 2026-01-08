@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/api_endpoints.dart';
+import '../constants/api_config.dart';
 
 class ApiService {
   // Headers par défaut
@@ -109,7 +110,7 @@ class ApiService {
         ..bodyBytes = utf8.encode(jsonEncode(body));
 
       final streamedResponse = await request.send().timeout(
-        const Duration(seconds: 30),
+        Duration(seconds: ApiConfig.requestTimeout),
       );
       final response = await http.Response.fromStream(streamedResponse);
 

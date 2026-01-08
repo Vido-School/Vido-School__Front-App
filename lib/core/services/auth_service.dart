@@ -27,6 +27,8 @@ class AuthService {
       );
 
       final token = authResponse['access'];
+      final refreshToken = authResponse['refresh'];
+      
       if (token == null) {
         throw Exception("Aucun token reçu dans la réponse");
       }
@@ -39,7 +41,11 @@ class AuthService {
 
       final user = UserModel.fromJson(userResponse);
 
-      return {'token': token, 'user': user};
+      return {
+        'token': token, 
+        'refreshToken': refreshToken,
+        'user': user
+      };
     } catch (e) {
       throw Exception("Erreur de connexion: ${e.toString()}");
     }

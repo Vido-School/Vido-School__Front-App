@@ -56,74 +56,83 @@ class RoleCardWidget extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: role["iconBackgroundColor"],
-                      borderRadius: BorderRadius.circular(20),
+              child: ClipRect(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: role["iconBackgroundColor"],
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Icon(
+                        role["icon"],
+                        size: 30,
+                        color: role["color"],
+                      ),
                     ),
-                    child: Icon(
-                      role["icon"],
-                      size: 30,
-                      color: role["color"],
+                    const SizedBox(height: 12),
+                    Text(
+                      role["title"],
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: role["color"],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 15),
-                  Text(
-                    role["title"],
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: role["color"],
+                    const SizedBox(height: 6),
+                    Text(
+                      role["description"],
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppColors.textSecondary,
+                        height: 1.4,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    role["description"],
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: AppColors.textSecondary,
-                      height: 1.5,
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: (role["features"] as List<Map<String, dynamic>>)
-                        .map((feature) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 2),
-                              child: Icon(
-                                feature["icon"],
-                                size: 16,
-                                color: role["color"],
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                feature["text"],
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: AppColors.textPrimary.withOpacity(0.7),
+                    const SizedBox(height: 10),
+                    Flexible(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: (role["features"] as List<Map<String, dynamic>>)
+                            .map((feature) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 6),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 2),
+                                  child: Icon(
+                                    feature["icon"],
+                                    size: 16,
+                                    color: role["color"],
+                                  ),
                                 ),
-                              ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    feature["text"],
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: AppColors.textPrimary.withOpacity(0.7),
+                                      height: 1.3,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ],
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

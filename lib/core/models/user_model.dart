@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class UserModel {
   final int id;
   final String email;
@@ -60,7 +58,7 @@ class UserModel {
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    debugPrint('Creating UserModel from JSON: $json');
+    print('Creating UserModel from JSON: $json');
     return UserModel(
       id: json['id'] as int? ?? 0,
       email: json['email'] as String? ?? '',
